@@ -1,25 +1,44 @@
+# Maven / Java
 target/
+*.class
+*.jar
+*.war
+*.nar
+*.ear
+
+# IDE
 .idea/
 *.iml
 .classpath
 .project
 .settings/
 .vscode/
+*.ctxt
+.mtj.tmp/
 
+# Local configuration and secrets
 .env
 .env.*
 !.env.example
 application-local.yml
 application-local.yaml
-
-*.log
-logs/
-
 *.jks
 *.p12
 *.pfx
 *.pem
 *.key
 
+# Logs and crash reports
+*.log
+logs/
+hs_err_pid*
+replay_pid*
+
+# Archives
+*.zip
+*.tar.gz
+*.rar
+
+# OS
 .DS_Store
 Thumbs.db
