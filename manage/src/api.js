@@ -99,3 +99,8 @@ export const getEmployees = (params = {}) => {
 export const createEmployee = (data) => request('/emps', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(data) })
 export const updateEmployee = (data) => request('/emps', { method: 'PUT', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(data) })
 export const deleteEmployee = (id) => request(`/emps/${id}`, { method: 'DELETE' })
+export const uploadAvatar = (file) => {
+  const body = new FormData()
+  body.append('file', file)
+  return request('/upload', { method: 'POST', body })
+}
