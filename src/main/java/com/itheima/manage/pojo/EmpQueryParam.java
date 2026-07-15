@@ -10,6 +10,7 @@ import java.time.LocalDate;
 public class EmpQueryParam {
     private Integer page =1;
     private Integer pageSize = 10;
+    private Integer offset = 0;
     private String name;
     private Integer gender;
     @DateTimeFormat(pattern = "yyyy-MM-dd")

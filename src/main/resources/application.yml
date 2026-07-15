@@ -11,7 +11,8 @@ spring:
       max-file-size: 10MB
       max-request-size: 100MB
 
-mybatis:
+mmybatis:
+  mapper-locations: classpath:com/itheima/manage/mapper/*.xml
   configuration:
     log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
     map-underscore-to-camel-case: true
@@ -27,3 +28,4 @@ aliyun:
     region: cn-beijing
     access-key-id: ${OSS_ACCESS_KEY_ID:}
     access-key-secret: ${OSS_ACCESS_KEY_SECRET:}
+
