@@ -5,6 +5,7 @@ import com.itheima.manage.pojo.EmpQueryParam;
 import org.apache.ibatis.annotations.*;
 
 import java.util.List;
+import java.util.Map;
 
 @Mapper
 public interface EmpMapper {
@@ -26,4 +27,5 @@ public interface EmpMapper {
 //查询所有员工信息
 @Select("select e.*, d.name as deptName from emp e left join dept d on e.dept_id = d.id")
 List<Emp> findall();
+    List<Map<String, Object>> countEmpJobData();
 }
