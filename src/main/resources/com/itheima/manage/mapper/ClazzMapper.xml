@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.itheima.manage.mapper.ClazzMapper">
+    <insert id="add">
+        insert into clazz (name, room, begin_date, end_date, master_id, subject, create_time, update_time)
+        values (#{name}, #{room}, #{beginDate}, #{endDate}, #{masterId}, #{subject}, now(), now())
+    </insert>
+    <update id="update">
+        update clazz
+        <set>
+            <if test="name != null">name = #{name},</if>
+            <if test="room != null">room = #{room},</if>
+            <if test="beginDate != null">begin_date = #{beginDate},</if>
+            <if test="endDate != null">end_date = #{endDate},</if>
+            <if test="masterId != null">master_id = #{masterId},</if>
+            <if test="subject != null">subject = #{subject},</if>
+        </set>
+        where id = #{id}
+    </update>
+    <delete id="delete">
+        delete from clazz where id = #{id}
+    </delete>
+    <select id="listPage" resultType="com.itheima.manage.pojo.Clazz">
+        select c.*, e.name as masterName
+        from clazz c
+        left join emp e on c.master_id = e.id
+        <where>
+            <if test="name != null and name != ''">and c.name like concat('%', #{name}, '%')</if>
+            <if test="room != null and room != ''">and c.room like concat('%', #{room}, '%')</if>
+            <if test="beginDate != null">and c.begin_date &gt;= #{beginDate}</if>
+            <if test="endDate != null">and c.end_date &lt;= #{endDate}</if>
+            <if test="masterId != null">and c.master_id = #{masterId}</if>
+            <if test="subject != null">and c.subject = #{subject}</if>
+        </where>
+        order by c.create_time desc
+        limit #{offset}, #{pageSize}
+    </select>
+
+    <select id="count" resultType="java.lang.Long">
+        select count(*)
+        from clazz c
+        <where>
+            <if test="name != null and name != ''">and c.name like concat('%', #{name}, '%')</if>
+            <if test="room != null and room != ''">and c.room like concat('%', #{room}, '%')</if>
+            <if test="beginDate != null">and c.begin_date &gt;= #{beginDate}</if>
+            <if test="endDate != null">and c.end_date &lt;= #{endDate}</if>
+            <if test="masterId != null">and c.master_id = #{masterId}</if>
+            <if test="subject != null">and c.subject = #{subject}</if>
+        </where>
+    </select>
+    <select id="findById" resultType="com.itheima.manage.pojo.Clazz">
+        select c.*, e.name as masterName
+        from clazz c
+        left join emp e on c.master_id = e.id
+        where c.id = #{id}
+    </select>
+    <select id="findAll" resultType="com.itheima.manage.pojo.Clazz">
+        select c.*, e.name as masterName
+        from clazz c
+        left join emp e on c.master_id = e.id
+    </select>
+</mapper>
