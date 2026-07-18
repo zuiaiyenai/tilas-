@@ -121,7 +121,18 @@
         group by job
         order by num
     </select>
-
+    <select id="countEmpGenderData" resultType="java.util.Map">
+        select
+            (case
+                 when gender = 1 then '男'
+                 when gender = 2 then '女'
+                 else '其他'
+                end) as pos,
+            count(*) as num
+        from emp
+        group by gender
+        order by num
+    </select>
 
 
     <delete id="deleteByIds">

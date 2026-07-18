@@ -28,4 +28,5 @@ public interface EmpMapper {
 @Select("select e.*, d.name as deptName from emp e left join dept d on e.dept_id = d.id")
 List<Emp> findall();
     List<Map<String, Object>> countEmpJobData();
+    List<Map<String, Object>> countEmpGenderData();
 }

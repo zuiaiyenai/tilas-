@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.itheima.manage.mapper.StudentMapper">
+    <insert id="add">
+        insert into student (name, no, gender, phone, id_card, is_college, address, degree,
+                             graduation_date, clazz_id, violation_count, violation_score,
+                             create_time, update_time)
+        values (#{name}, #{no}, #{gender}, #{phone}, #{idCard}, #{isCollege}, #{address}, #{degree},
+                #{graduationDate}, #{clazzId}, #{violationCount}, #{violationScore}, now(), now())
+    </insert>
+
+    <update id="update">
+        update student
+        <set>
+            <if test="name != null">name = #{name},</if>
+            <if test="no != null">no = #{no},</if>
+            <if test="gender != null">gender = #{gender},</if>
+            <if test="phone != null">phone = #{phone},</if>
+            <if test="idCard != null">id_card = #{idCard},</if>
+            <if test="isCollege != null">is_college = #{isCollege},</if>
+            <if test="address != null">address = #{address},</if>
+            <if test="degree != null">degree = #{degree},</if>
+            <if test="graduationDate != null">graduation_date = #{graduationDate},</if>
+            <if test="clazzId != null">clazz_id = #{clazzId},</if>
+            <if test="violationCount != null">violation_count = #{violationCount},</if>
+            <if test="violationScore != null">violation_score = #{violationScore},</if>
+            update_time = now()
+        </set>
+        where id = #{id}
+    </update>
+
+    <update id="violation">
+        update student
+        set violation_count = COALESCE(violation_count, 0) + 1,
+            violation_score = COALESCE(violation_score, 0) + #{scoreValue},
+            update_time = now()
+        where id = #{id}
+    </update>
+
+    <delete id="delete">
+        delete from student where id = #{id}
+    </delete>
+    <delete id="deleteByIds">
+        delete from student where id in
+        <foreach collection="ids" item="id" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+
+    <select id="listPage" resultType="com.itheima.manage.pojo.Student">
+        select s.*, c.name as clazzName
+        from student s
+        left join clazz c on s.clazz_id = c.id
+        <where>
+            <if test="name != null and name != ''">and s.name like concat('%', #{name}, '%')</if>
+            <if test="no != null and no != ''">and s.no like concat('%', #{no}, '%')</if>
+            <if test="gender != null">and s.gender = #{gender}</if>
+            <if test="clazzId != null">and s.clazz_id = #{clazzId}</if>
+            <if test="degree != null">and s.degree = #{degree}</if>
+            <if test="beginGraduationDate != null">and s.graduation_date &gt;= #{beginGraduationDate}</if>
+            <if test="endGraduationDate != null">and s.graduation_date &lt;= #{endGraduationDate}</if>
+        </where>
+        order by s.create_time desc
+        limit #{offset}, #{pageSize}
+    </select>
+    <select id="count" resultType="java.lang.Long">
+        select count(*)
+        from student s
+        <where>
+            <if test="name != null and name != ''">and s.name like concat('%', #{name}, '%')</if>
+            <if test="no != null and no != ''">and s.no like concat('%', #{no}, '%')</if>
+            <if test="gender != null">and s.gender = #{gender}</if>
+            <if test="clazzId != null">and s.clazz_id = #{clazzId}</if>
+            <if test="degree != null">and s.degree = #{degree}</if>
+            <if test="beginGraduationDate != null">and s.graduation_date &gt;= #{beginGraduationDate}</if>
+            <if test="endGraduationDate != null">and s.graduation_date &lt;= #{endGraduationDate}</if>
+        </where>
+    </select>
+
+    <select id="findById" resultType="com.itheima.manage.pojo.Student">
+        select s.*, c.name as clazzName
+        from student s
+                 left join clazz c on s.clazz_id = c.id
+        where s.id = #{id}
+    </select>
+</mapper>

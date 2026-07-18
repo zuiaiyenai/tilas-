@@ -1,5 +1,6 @@
 package com.itheima.manage.controller;
 
+import com.itheima.manage.pojo.GenderOption;
 import com.itheima.manage.pojo.JobOption;
 import com.itheima.manage.pojo.Result;
 import com.itheima.manage.service.ReportService;
@@ -22,5 +23,11 @@ public class ReportController {
         JobOption jobOption = reportService.getEmpJobData();
         return Result.success(jobOption);
     }
-
+//员工性别统计
+    @GetMapping("/empGenderData")
+    public  Result empGenderData() {
+        log.info("生成员工性别数据");
+        GenderOption genderOption = reportService.getEmpGenderData();
+        return Result.success(genderOption);
+    }
 }
