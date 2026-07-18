@@ -1,15 +1,22 @@
 package com.itheima.manage.mapper;
 
 import com.itheima.manage.pojo.EmpLog;
-import org.apache.ibatis.annotations.Insert;
-import org.apache.ibatis.annotations.Mapper;
-import org.springframework.transaction.annotation.Propagation;
-import org.springframework.transaction.annotation.Transactional;
+import com.itheima.manage.pojo.EmpLogQueryParam;
+import org.apache.ibatis.annotations.*;
+
+import java.util.List;
 
 @Mapper
 public interface EmpLogMapper {
 
     @Insert("insert into emp_log (operate_time, info) values (#{operateTime}, #{info})")
-    public void insert(EmpLog empLog);
+    @Options(useGeneratedKeys = true, keyProperty = "id", keyColumn = "id")
+    void insert(EmpLog empLog);
+
+    @SelectProvider(type = EmpLogSqlProvider.class, method = "listPage")
+    List<EmpLog> listPage(EmpLogQueryParam empLogQueryParam);
+
+    @SelectProvider(type = EmpLogSqlProvider.class, method = "count")
+    Long count(EmpLogQueryParam empLogQueryParam);
 
 }

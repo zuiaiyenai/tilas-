@@ -133,6 +133,28 @@
         group by gender
         order by num
     </select>
+    <select id="countStudentDegreeData" resultType="java.util.Map">
+        select
+            (case
+                 when degree = 1 then '本科'
+                 when degree = 2 then '硕士'
+                 when degree = 3 then '博士'
+                 else '其他'
+                end) as pos,
+            count(*) as num
+        from student
+        group by degree
+        order by num
+    </select>
+    <select id="countClazzCountData" resultType="java.util.Map">
+        select
+            c.name as pos,
+            count(s.id) as num
+        from clazz c
+                 left join student s on c.id = s.clazz_id
+        group by c.id, c.name
+        order by num desc
+    </select>
 
 
     <delete id="deleteByIds">
