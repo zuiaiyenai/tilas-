@@ -31,4 +31,8 @@ List<Emp> findall();
     List<Map<String, Object>> countEmpGenderData();
     List<Map<String, Object>> countStudentDegreeData();
     List<Map<String, Object>> countClazzCountData();
+
+    @Select("select id, username, password, name, gender, phone, job, salary, image, entry_date, dept_id, create_time, update_time from emp where username = #{username}")
+    Emp findByUsername(String username);
+
 }

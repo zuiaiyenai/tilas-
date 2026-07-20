@@ -1,4 +1,3 @@
-
 package com.itheima.manage.service.impl;
 
 import com.itheima.manage.mapper.EmpExprMapper;
@@ -6,6 +5,8 @@ import com.itheima.manage.mapper.EmpMapper;
 import com.itheima.manage.pojo.*;
 import com.itheima.manage.service.EmpLogService;
 import com.itheima.manage.service.EmpService;
+import com.itheima.manage.utils.JwtUtil;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -14,8 +15,10 @@ import org.springframework.util.CollectionUtils;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
-
+import java.util.Map;
+@Slf4j
 @Service
 public class EmpServiceImpl implements EmpService {
     @Autowired
@@ -92,5 +95,38 @@ public class EmpServiceImpl implements EmpService {
     @Override
     public List<Emp> findall() {
         return empMapper.findall();
+    }
+    // ... existing code ...
+
+    @Override
+    public Result login(String username, String password) {
+        Emp emp = empMapper.findByUsername(username);
+
+        if (emp == null) {
+            log.error("用户不存在: {}", username);
+            return Result.error("用户名或密码错误");
+        }
+
+        String dbPassword = emp.getPassword();
+
+        boolean passwordMatch = password.equals(dbPassword);
+
+        if (!passwordMatch) {
+            log.error("密码错误，用户名: {}, 数据库密码: {}", username, dbPassword);
+            return Result.error("用户名或密码错误");
+        }
+
+        String token = JwtUtil.generateToken(emp.getId().longValue(), emp.getUsername());
+
+        emp.setPassword(null);
+
+        Map<String, Object> loginResult = new HashMap<>();
+        loginResult.put("id", emp.getId());
+        loginResult.put("username", emp.getUsername());
+        loginResult.put("name", emp.getName());
+        loginResult.put("token", token);
+        log.info("用户登录成功: {}, userId: {}", username, emp.getId());
+
+        return Result.success(loginResult);
     }
 }

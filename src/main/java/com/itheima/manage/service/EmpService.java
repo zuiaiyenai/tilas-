@@ -3,6 +3,7 @@ package com.itheima.manage.service;
 import com.itheima.manage.pojo.Emp;
 import com.itheima.manage.pojo.EmpQueryParam;
 import com.itheima.manage.pojo.PageResult;
+import com.itheima.manage.pojo.Result;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import java.time.LocalDate;
@@ -32,4 +33,5 @@ public interface EmpService {
     Emp findById(Integer id);
 //查询所有员工信息
     List<Emp> findall();
+    Result login(String username, String password);
 }
